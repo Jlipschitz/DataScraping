@@ -3,27 +3,27 @@ var Schema = mongoose.Schema;
 
 var AddressesSchema = new Schema({
   name: {
-    type:String,
+    type: String,
     required: true
   },
   address: {
-    type:String,
-    required:true
+    type: String,
+    required: true
   },
   city: {
-    type:String,
-    required:true
+    type: String,
+    required: true
   },
   state: {
-    type:String,
-    required:true
+    type: String,
+    required: true
   },
   zipCode: {
     type: String,
-    require:true
+    require: true
   },
   phone: {
-    type:String,
+    type: String,
     required: false
   }
 });
