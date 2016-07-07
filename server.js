@@ -75,56 +75,56 @@ setTimeout( () => {
                         for (var b = siteStore.minListNum; b < siteStore.maxListNum; b++) {
 
                             async.parallel({
-                                name: (parralelCallBack) => {
+                                name: (parallelCallback) => {
                                     driver.findElement(By.id('content:FindProvider:dTblProviders_' + b + ':otxtProName')).getText()
                                         //find name and store into result
                                         .then(providerName => {
-                                            return parralelCallBack(null, providerName.toString())
+                                            return parallelCallback(null, providerName.toString())
                                         }, (err) =>  {
                                             console.log('Name not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + b);
                                         })
                                 },
-                                address: (parralelCallBack) => {
+                                address: (parallelCallback) => {
                                     driver.findElement(By.id('content:FindProvider:dTblProviders_' + b + ':otxtAddressVal')).getText()
                                         //find address and store into result
                                         .then(providerAddress => {
-                                            return parralelCallBack(null, providerAddress.toString())
+                                            return parallelCallback(null, providerAddress.toString())
                                         }, (err) => {
                                             console.log('Address not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + b);
                                         })
                                 },
-                                city: (parralelCallBack) => {
+                                city: (parallelCallback) => {
                                     driver.findElement(By.id('content:FindProvider:dTblProviders_' + b + ':otxtCityVal')).getText()
                                         //find city and store into result
                                         .then(providerCity => {
-                                            return parralelCallBack(null, providerCity.toString())
+                                            return parallelCallback(null, providerCity.toString())
                                         }, (err) => {
                                             console.log('City not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + b);
                                         })
                                 },
-                                state: (parralelCallBack) => {
+                                state: (parallelCallback) => {
                                     driver.findElement(By.id('content:FindProvider:dTblProviders_' + b + ':otxtStateVal')).getText()
                                         //find state and store into result
                                         .then(providerState => {
-                                            return parralelCallBack(null, providerState.toString())
+                                            return parallelCallback(null, providerState.toString())
                                         }, (err) => {
                                             console.log('State not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + b);
                                         })
                                 },
-                                zip: (parralelCallBack) => {
+                                zip: (parallelCallback) => {
                                     driver.findElement(By.id('content:FindProvider:dTblProviders_' + b + ':otxtZipVal')).getText()
                                         //find zip and store into result
                                         .then(providerZip => {
-                                            return parralelCallBack(null, providerZip.toString())
+                                            return parallelCallback(null, providerZip.toString())
                                         }, (err) => {
                                             console.log('Zip not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + b);
                                         })
                                 },
-                                phone: (parralelCallBack) => {
+                                phone: (parallelCallback) => {
                                     driver.findElement(By.id('content:FindProvider:dTblProviders_' + b + ':otxtPhoneVal')).getText()
                                         //find phone number and store into result
                                         .then(providerPhoneNum => {
-                                            return parralelCallBack(null, providerPhoneNum.toString())
+                                            return parallelCallback(null, providerPhoneNum.toString())
                                         }, (err) => {
                                             console.log('Phone number not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + b);
                                         })
