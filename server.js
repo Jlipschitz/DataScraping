@@ -155,6 +155,8 @@ driver.wait(() => {
                 }, (err) => {
                     if (err) return console.log(err)
                     //go to the next page to display more data
+                    if (siteStore.pageNum === 126) return siteStore.clearInterval();
+
                     siteStore.pageNum++;
                     siteStore.indexes = siteStore.indexes.map(item => item += 10)
                     driver.findElement(By.id('content:FindProvider:dataScrolleridx' + siteStore.pageNum)).click();
