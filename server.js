@@ -42,9 +42,9 @@ var driver = new webdriver.Builder()
     .build();
 
 //open up our starting page
-//driver.get('localhost:3000');
+driver.get('localhost:3000');
 
-//app.get('/selenium', function(req, res) {
+app.get('/selenium', function(req, res) {
 
 //grab initial elements and fill out criteria
 driver.get('https://www.e-nva.com/nva/content/tourist/JSFPEntryTouristPage.jsf');
@@ -173,7 +173,7 @@ driver.wait(() => {
         //call data store function per four seconds
         siteStore.createInterval();
     });
-//	})
+	})
 
 app.listen(3000, () => {
     console.log('App running on port 3000!');
