@@ -51,7 +51,7 @@ driver.get('https://www.e-nva.com/nva/content/tourist/JSFPEntryTouristPage.jsf')
 
 //fill out form criteria to tailor our search
 driver.findElement(By.name('content:FindProvider:strProviderZipCode')).sendKeys('10018');
-driver.findElement(By.css('.mainContent > option:nth-child(1)')).click();
+driver.findElement(By.css('.mainContent > option:nth-child(4)')).click();
 driver.findElement(By.css('.plansDropDown > option:nth-child(2)')).click();
 driver.findElement(By.id('content:FindProvider:btnFindProviderSearch1')).click();
 
@@ -66,10 +66,15 @@ driver.wait(() => {
             //set nums to help handle different pages
             indexes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
             pageNum: 1,
+            cBreak: () => {
+                console.log('-------------------------------');
+            },
             grabData: () => {
                 //store addresses found
-
+                console.log('Starting page ' + siteStore.pageNum)
+                console.log('-------------------------------');
                 async.forEach(siteStore.indexes, (index, eachCallback) => {
+                    console.log('Starting element ' + index)
                     async.parallel({
                         name: (parralelCallBack) => {
                             driver.findElement(By.id('content:FindProvider:dTblProviders_' + index + ':otxtProName')).getText()
@@ -77,7 +82,7 @@ driver.wait(() => {
                                 .then(providerName => {
                                     return parralelCallBack(null, providerName.toString())
                                 }, (err) => {
-                                    console.log('Name not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + index);
+                                    parralelCallBack(err);
                                 })
                         },
                         address: (parralelCallBack) => {
@@ -86,7 +91,7 @@ driver.wait(() => {
                                 .then(providerAddress => {
                                     return parralelCallBack(null, providerAddress.toString())
                                 }, (err) => {
-                                    console.log('Address not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + index);
+                                    parralelCallBack(err);
                                 })
                         },
                         city: (parralelCallBack) => {
@@ -95,7 +100,7 @@ driver.wait(() => {
                                 .then(providerCity => {
                                     return parralelCallBack(null, providerCity.toString())
                                 }, (err) => {
-                                    console.log('City not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + index);
+                                    parralelCallBack(err);
                                 })
                         },
                         state: (parralelCallBack) => {
@@ -104,7 +109,7 @@ driver.wait(() => {
                                 .then(providerState => {
                                     return parralelCallBack(null, providerState.toString())
                                 }, (err) => {
-                                    console.log('State not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + index);
+                                    parralelCallBack(err);
                                 })
                         },
                         zip: (parralelCallBack) => {
@@ -113,7 +118,7 @@ driver.wait(() => {
                                 .then(providerZip => {
                                     return parralelCallBack(null, providerZip.toString())
                                 }, (err) => {
-                                    console.log('Zip not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + index);
+                                    parralelCallBack(err);
                                 })
                         },
                         phone: (parralelCallBack) => {
@@ -122,12 +127,14 @@ driver.wait(() => {
                                 .then(providerPhoneNum => {
                                     return parralelCallBack(null, providerPhoneNum.toString())
                                 }, (err) => {
-                                    console.log('Phone number not found ' + 'pagenumber:' + siteStore.pageNum + ' listNumber:' + index);
+                                    parralelCallBack(err);
                                 })
                         }
                     }, (err, result) => {
 
                         //iniate save to our mongodb collection Addresses
+                        if (err) console.err
+
                         var entry = new Addresses(result);
 
                         entry.save((err, doc) => {
@@ -137,21 +144,20 @@ driver.wait(() => {
                                 console.log(doc);
                             }
                         });
+                        //set our incrementers to coincide with the page that's called next
+                        siteStore.cBreak();
+                        console.log('Save entry is being hit');
+                        siteStore.cBreak();
+
+                        return eachCallback();
                     })
-                    //set our incrementers to coincide with the page that's called next
-                    siteStore.pageNum++;
-                    siteStore.indexes.map(item => item += 10)
 
+                }, (err) => {
+                    if (err) return console.log(err)
                     //go to the next page to display more data
+                    siteStore.pageNum++;
+                    siteStore.indexes = siteStore.indexes.map(item => item += 10)
                     driver.findElement(By.id('content:FindProvider:dataScrolleridx' + siteStore.pageNum)).click();
-                    console.log('entry is being hit');
-
-                }, (err, asyncEachCallback) => {
-                    
-                    if(err) return console.log(err)
-
-                    return asyncEachCallback();
-                    
                 });
 
             },
@@ -161,10 +167,10 @@ driver.wait(() => {
                 //driver.quit();
             },
             createInterval: () => {
-                setInterval(siteStore.grabData, 1000);
+                setInterval(siteStore.grabData, 8000);
             }
         }
-        //call data store function per seven seconds
+        //call data store function per four seconds
         siteStore.createInterval();
     });
 //	})
